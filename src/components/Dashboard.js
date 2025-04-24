@@ -10,20 +10,30 @@ function Dashboard({ user }) {
     completedBooks: 0,
     booksDueSoon: 0,
   });
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const res = await axios.get('http://localhost:5000/api/auth/stats', {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        });
-        setStats(res.data);
-      } catch (error) {
+  const fetchStats = async (retryCount = 0) => {
+    try {
+      setLoading(true);
+      const res = await axios.get('http://localhost:5000/api/auth/stats', {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+      setStats(res.data);
+    } catch (error) {
+      if (retryCount < 2) {
+        // Retry up to 2 times with a 1-second delay
+        setTimeout(() => fetchStats(retryCount + 1), 1000);
+      } else {
         toast.error(error.response?.data?.message || 'Error fetching stats');
       }
-    };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchStats();
-  }, []);
+  }, []); // Empty dependency array to fetch only on mount
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-50 to-indigo-50 pt-20">
@@ -51,24 +61,28 @@ function Dashboard({ user }) {
           
           <div className="mt-8 p-6 bg-gray-50 rounded-lg">
             <h2 className="text-2xl font-semibold mb-4 text-gray-800">Quick Stats</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center">
-                <p className="text-3xl font-bold text-indigo-600">{stats.booksBorrowed}</p>
-                <p className="text-gray-600">Books Borrowed</p>
+            {loading ? (
+              <div className="text-center text-gray-600">Loading stats...</div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-indigo-600">{stats.booksBorrowed}</p>
+                  <p className="text-gray-600">Books Borrowed</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-indigo-600">{stats.currentlyReading}</p>
+                  <p className="text-gray-600">Currently Reading</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-indigo-600">{stats.completedBooks}</p>
+                  <p className="text-gray-600">Completed Books</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-indigo-600">{stats.booksDueSoon}</p>
+                  <p className="text-gray-600">Due Soon</p>
+                </div>
               </div>
-              <div className="text-center">
-                <p className="text-3xl font-bold text-indigo-600">{stats.currentlyReading}</p>
-                <p className="text-gray-600">Currently Reading</p>
-              </div>
-              <div className="text-center">
-                <p className="text-3xl font-bold text-indigo-600">{stats.completedBooks}</p>
-                <p className="text-gray-600">Completed Books</p>
-              </div>
-              <div className="text-center">
-                <p className="text-3xl font-bold text-indigo-600">{stats.booksDueSoon}</p>
-                <p className="text-gray-600">Due Soon</p>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
