@@ -34,7 +34,7 @@ function Register() {
   };
 
   return (
-    <div className="min-h-screen mt-9 bg-gradient-to-r from-blue-100 to-purple-100 flex items-center justify-center">
+    <div className="min-h-screen  bg-gradient-to-r from-blue-100 to-purple-100 flex items-center justify-center">
       <div className="w-full max-w-md">
         <div className="bg-white p-10 rounded-lg shadow-2xl">
           <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">Create Account</h2>
