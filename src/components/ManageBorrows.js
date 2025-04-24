@@ -40,43 +40,54 @@ function ManageBorrows() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 pt-20">
-      <div className="max-w-4xl mx-auto p-6">
-        <h1 className="text-3xl font-bold mb-6">Manage Borrow Records</h1>
-        <div className="bg-white p-6 rounded shadow-md">
-          <table className="w-full">
-            <thead>
-              <tr>
-                <th className="text-left p-2">User</th>
-                <th className="text-left p-2">Book Title</th>
-                <th className="text-left p-2">Borrow Date</th>
-                <th className="text-left p-2">Return Date</th>
-                <th className="text-left p-2">Status</th>
-                <th className="text-left p-2">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {borrows.map((borrow) => (
-                <tr key={borrow.id}>
-                  <td className="p-2">{borrow.username}</td>
-                  <td className="p-2">{borrow.title}</td>
-                  <td className="p-2">{borrow.borrow_date}</td>
-                  <td className="p-2">{borrow.return_date || '-'}</td>
-                  <td className="p-2">{borrow.status}</td>
-                  <td className="p-2">
-                    {borrow.status === 'borrowed' && (
-                      <button
-                        onClick={() => handleReturn(borrow.id)}
-                        className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
-                      >
-                        Mark as Returned
-                      </button>
-                    )}
-                  </td>
+    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 min-h-screen mt-9 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-extrabold text-gray-900 mb-2">Borrow Management</h1>
+          <p className="text-lg text-gray-600">Track and manage all book borrowing activities</p>
+        </div>
+        <div className="bg-white rounded-xl shadow-xl overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Book Title</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Borrow Date</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Return Date</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {borrows.map((borrow) => (
+                  <tr key={borrow.id} className="hover:bg-gray-50 transition-colors duration-200">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{borrow.username}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{borrow.title}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{borrow.borrow_date}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{borrow.return_date || '-'}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        borrow.status === 'borrowed' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
+                      }`}>
+                        {borrow.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      {borrow.status === 'borrowed' && (
+                        <button
+                          onClick={() => handleReturn(borrow.id)}
+                          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+                        >
+                          Return Book
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
