@@ -14,46 +14,59 @@ function Navbar({ user, setUser }) {
   };
 
   return (
-    <nav className="bg-blue-600 text-white p-4 fixed w-full top-0 z-10 shadow-md">
-      <div className="max-w-6xl mx-auto flex justify-between items-center">
-        <Link to="/dashboard" className="text-xl font-bold">
-          Library Management
+
+
+
+
+    <nav className="bg-gradient-to-r from-blue-700 to-blue-500 text-white p-6 fixed w-full top-0 z-10 shadow-lg">
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <Link to="/dashboard" className="text-2xl font-bold tracking-wider hover:text-blue-200 transition duration-300">
+          📚 Library Management
         </Link>
-        <div className="flex space-x-4">
+
+        <div className="flex items-center space-x-6">
           {user ? (
             <>
-              <Link to="/dashboard" className="hover:underline">
+
+              <Link to="/dashboard" className="nav-link hover:text-blue-200 transition duration-300 font-medium">
                 Home
               </Link>
-              <Link to="/books" className="hover:underline">
+
+              <Link to="/books" className="nav-link hover:text-blue-200 transition duration-300 font-medium">
                 Books
               </Link>
-              <Link to="/borrow" className="hover:underline">
+
+              <Link to="/borrow" className="nav-link hover:text-blue-200 transition duration-300 font-medium">
                 Borrow/Return
               </Link>
               {user.role === 'admin' && (
                 <>
-                  <Link to="/add-book" className="hover:underline">
+
+                  <Link to="/add-book" className="nav-link hover:text-blue-200 transition duration-300 font-medium">
                     Add Book
                   </Link>
-                  <Link to="/manage-borrows" className="hover:underline">
+
+                  <Link to="/manage-borrows" className="nav-link hover:text-blue-200 transition duration-300 font-medium">
                     Manage Borrows
                   </Link>
                 </>
               )}
               <button
                 onClick={handleLogout}
-                className="hover:underline focus:outline-none"
+
+                className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition duration-300 font-medium focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50"
               >
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link to="/login" className="hover:underline">
+
+              <Link to="/login" className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg transition duration-300 font-medium">
                 Login
               </Link>
-              <Link to="/register" className="hover:underline">
+
+              <Link to="/register" className="bg-green-500 hover:bg-green-600 px-6 py-2 rounded-lg transition duration-300 font-medium">
                 Register
               </Link>
             </>
