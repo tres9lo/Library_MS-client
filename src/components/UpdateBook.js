@@ -1,14 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-function AddBook() {
+function UpdateBook() {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [isbn, setIsbn] = useState('');
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  useEffect(() => {
+    const fetchBook = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/books`);
+        const book = res.data.find((b) => b.id === parseInt(id));
+        if (book) {
+          setTitle(book.title);
+          setAuthor(book.author);
+          setIsbn(book.isbn);
+          setQuantity(book.quantity);
+        } else {
+          toast.error('Book not found');
+          navigate('/books');
+        }
+      } catch (error) {
+        toast.error('Error fetching book');
+      }
+    };
+    fetchBook();
+  }, [id, navigate]);
 
   const validateForm = () => {
     if (!title || title.trim() === '') {
@@ -35,22 +57,22 @@ function AddBook() {
     if (!validateForm()) return;
 
     try {
-      await axios.post(
-        'http://localhost:5000/api/books',
+      await axios.put(
+        `http://localhost:5000/api/books/${id}`,
         { title, author, isbn, quantity },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       );
-      toast.success('Book added successfully');
+      toast.success('Book updated successfully');
       navigate('/books');
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Error adding book');
+      toast.error(error.response?.data?.message || 'Error updating book');
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-100 pt-20">
       <div className="max-w-md mx-auto bg-white p-8 rounded shadow-md">
-        <h2 className="text-2xl font-bold mb-6">Add Book</h2>
+        <h2 className="text-2xl font-bold mb-6">Update Book</h2>
         <div>
           <div>
             <label className="block text-sm font-medium text-gray-700">Title</label>
@@ -92,7 +114,7 @@ function AddBook() {
             onClick={handleSubmit}
             className="mt-6 w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
           >
-            Add Book
+            Update Book
           </button>
         </div>
       </div>
@@ -100,4 +122,4 @@ function AddBook() {
   );
 }
 
-export default AddBook;
+export default UpdateBook;

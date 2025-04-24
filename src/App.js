@@ -7,6 +7,8 @@ import BookList from './components/BookList';
 import AddBook from './components/AddBook';
 import BorrowBook from './components/BorrowBook';
 import ManageBorrows from './components/ManageBorrows';
+import UpdateBook from './components/UpdateBook';
+import Navbar from './components/Navbar';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -21,6 +23,7 @@ function App() {
 
   return (
     <Router>
+      <Navbar user={user} setUser={setUser} />
       <Routes>
         <Route path="/login" element={user ? <Navigate to="/dashboard" /> : <Login setUser={setUser} />} />
         <Route path="/register" element={user ? <Navigate to="/dashboard" /> : <Register />} />
@@ -43,6 +46,10 @@ function App() {
         <Route
           path="/manage-borrows"
           element={user && user.role === 'admin' ? <ManageBorrows /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/update-book/:id"
+          element={user && user.role === 'admin' ? <UpdateBook /> : <Navigate to="/login" />}
         />
         <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
