@@ -6,7 +6,6 @@ import { toast } from 'react-toastify';
 function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('user');
   const navigate = useNavigate();
 
   const validateForm = () => {
@@ -18,10 +17,6 @@ function Register() {
       toast.error('Password must be at least 6 characters long');
       return false;
     }
-    if (!['user', 'admin'].includes(role)) {
-      toast.error('Invalid role selected');
-      return false;
-    }
     return true;
   };
 
@@ -30,7 +25,7 @@ function Register() {
     if (!validateForm()) return;
 
     try {
-      await axios.post('http://localhost:5000/api/auth/register', { username, password, role });
+      await axios.post('http://localhost:5000/api/auth/register', { username, password, role: 'user' });
       toast.success('Registration successful');
       navigate('/login');
     } catch (error) {
@@ -39,48 +34,38 @@ function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="pt-20">
-        Entries for user crova sorted by date
-        <div className="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto">
-          <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
-          <div>
+    <div className="min-h-screen mt-9 bg-gradient-to-r from-blue-100 to-purple-100 flex items-center justify-center">
+      <div className="w-full max-w-md">
+        <div className="bg-white p-10 rounded-lg shadow-2xl">
+          <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">Create Account</h2>
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Username</label>
+              <label className="text-sm font-semibold text-gray-600 block">Username</label>
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="mt-1 p-2 w-full border rounded"
+                className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                placeholder="Enter your username"
               />
             </div>
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700">Password</label>
+            <div>
+              <label className="text-sm font-semibold text-gray-600 block">Password</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 p-2 w-full border rounded"
+                className="mt-2 p-3 w-full border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                placeholder="Enter your password"
               />
             </div>
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700">Role</label>
-              <select
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="mt-1 p-2 w-full border rounded"
-              >
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
-              </select>
-            </div>
             <button
-              onClick={handleSubmit}
-              className="mt-6 w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+              type="submit"
+              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-md font-medium hover:from-blue-600 hover:to-purple-700 transition duration-300 transform hover:scale-[1.02]"
             >
-              Register
+              Sign Up
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </div>
